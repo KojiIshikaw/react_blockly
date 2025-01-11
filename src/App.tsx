@@ -3,27 +3,15 @@ import React, { useEffect } from 'react';
 import * as Blockly from 'blockly';
 import { javascriptGenerator } from 'blockly/javascript';
 import { addCustomBlocks } from './customBlocks';
+import { initializeWorkspace } from './customBlocks';
 
 const App: React.FC = () => {
 	useEffect(() => {
 		// カスタムブロックを初期化
 		addCustomBlocks();
 
-		// モダンな形式でツールボックスを定義
-		const toolboxConfiguration = {
-			kind: 'flyoutToolbox',
-			contents: [
-				{
-					kind: 'block',
-					type: 'custom_block'
-				}
-			]
-		};
-
 		// Blocklyワークスペースの初期化
-		const workspace = Blockly.inject('blocklyDiv', {
-			toolbox: toolboxConfiguration
-		});
+		const workspace = initializeWorkspace();
 
 		// クリーンアップ関数
 		return () => {

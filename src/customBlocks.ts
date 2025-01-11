@@ -15,9 +15,26 @@ export const addCustomBlocks = () => {
 		}
 	};
 
+	Blockly.Blocks['custom_block2'] = {
+		init: function () {
+			this.appendDummyInput()
+				.appendField("カスタムブロック2");
+			this.setPreviousStatement(true, null);
+			this.setNextStatement(true, null);
+			this.setColour(230);
+			this.setTooltip("これはカスタムブロック2です");
+			this.setHelpUrl("");
+		}
+	};
+
 	// 2. JavaScriptジェネレーターの定義
 	javascriptGenerator.forBlock['custom_block'] = function (block) {
 		const code = 'console.log("Custom Block Executed");\n';
+		return code;
+	};
+
+	javascriptGenerator.forBlock['custom_block2'] = function (block) {
+		const code = 'console.log("Custom Block2 Executed");\n';
 		return code;
 	};
 };
@@ -31,6 +48,10 @@ export const initializeWorkspace = () => {
 				{
 					kind: 'block',
 					type: 'custom_block'
+				},
+				{
+					kind: 'block',
+					type: 'custom_block2'
 				}
 			]
 		}
