@@ -1,6 +1,8 @@
 import * as Blockly from 'blockly';
 // import { javascriptGenerator } from 'blockly/javascript';
 
+let workspaceInstance: Blockly.WorkspaceSvg | null = null;
+
 export const addCustomBlocks = () => {
 	// 1. ブロックの定義を登録
 	Blockly.Blocks['custom_block'] = {
@@ -121,7 +123,7 @@ export const addCustomBlocks = () => {
 
 // Workspaceの設定例
 export const initializeWorkspace = () => {
-	const workspace = Blockly.inject('blocklyDiv', {
+	workspaceInstance = Blockly.inject('blocklyDiv', {
 		toolbox: {
 			kind: 'flyoutToolbox',
 			contents: [
@@ -153,5 +155,15 @@ export const initializeWorkspace = () => {
 		}
 	});
 
-	return workspace;
+	return workspaceInstance;
+};
+
+// XML を取得する関数
+export const getXML = (): string | null => {
+	if (workspaceInstance) {
+		const xmlDom = Blockly.Xml.workspaceToDom(workspaceInstance);
+		const xmlText = Blockly.Xml.domToPrettyText(xmlDom); // フォーマットされた XML
+		return xmlText;
+	}
+	return null;
 };

@@ -1,16 +1,13 @@
 // App.tsx
 import React, { useEffect } from 'react';
-// import * as Blockly from 'blockly';
-// import { javascriptGenerator } from 'blockly/javascript';
-import { addCustomBlocks } from './customBlocks';
-import { initializeWorkspace } from './customBlocks';
+import { addCustomBlocks, initializeWorkspace, getXML } from './customBlocks';
 
 const App: React.FC = () => {
 	useEffect(() => {
 		// カスタムブロックを初期化
 		addCustomBlocks();
 
-		// Blocklyワークスペースの初期化
+		// Blockly ワークスペースの初期化
 		const workspace = initializeWorkspace();
 
 		// クリーンアップ関数
@@ -19,9 +16,21 @@ const App: React.FC = () => {
 		};
 	}, []);
 
+	// ボタンがクリックされたときのハンドラ
+	const handleGetXML = () => {
+		const xml = getXML();
+		if (xml) {
+			console.log('Blockly Workspace XML:', xml);
+			alert(xml); // 簡単な表示例。必要に応じて他の方法で表示や保存を実装
+		} else {
+			console.warn('Workspace is not initialized.');
+		}
+	};
+
 	return (
 		<div>
 			<h1>Blockly with React and Vite</h1>
+
 			<div
 				id="blocklyDiv"
 				style={{
@@ -30,6 +39,10 @@ const App: React.FC = () => {
 					border: '1px solid #ccc'  // 視覚的なフィードバック用
 				}}
 			/>
+
+			<button onClick={handleGetXML} style={{ marginTop: '10px' }}>
+				Get XML
+			</button>
 		</div>
 	);
 };
