@@ -27,6 +27,30 @@ export const addCustomBlocks = () => {
 		}
 	};
 
+	Blockly.Blocks['start_block'] = {
+		init: function () {
+			this.appendDummyInput()
+				.appendField("スタートブロック");
+			this.setPreviousStatement(false, null);
+			this.setNextStatement(true, null);
+			this.setColour(230);
+			this.setTooltip("これはスタートブロックです");
+			this.setHelpUrl("");
+		}
+	};
+
+	Blockly.Blocks['end_block'] = {
+		init: function () {
+			this.appendDummyInput()
+				.appendField("エンドブロック");
+			this.setPreviousStatement(true, null);
+			this.setNextStatement(false, null);
+			this.setColour(230);
+			this.setTooltip("これはエンドブロックです");
+			this.setHelpUrl("");
+		}
+	};
+
 	// 2. JavaScriptジェネレーターの定義
 	javascriptGenerator.forBlock['custom_block'] = function (block) {
 		const code = 'console.log("Custom Block Executed");\n';
@@ -35,6 +59,16 @@ export const addCustomBlocks = () => {
 
 	javascriptGenerator.forBlock['custom_block2'] = function (block) {
 		const code = 'console.log("Custom Block2 Executed");\n';
+		return code;
+	};
+
+	javascriptGenerator.forBlock['start_block'] = function (block) {
+		const code = 'console.log("Start Block Executed");\n';
+		return code;
+	};
+
+	javascriptGenerator.forBlock['end_block'] = function (block) {
+		const code = 'console.log("End Block2 Executed");\n';
 		return code;
 	};
 };
@@ -52,6 +86,14 @@ export const initializeWorkspace = () => {
 				{
 					kind: 'block',
 					type: 'custom_block2'
+				},
+				{
+					kind: 'block',
+					type: 'start_block'
+				},
+				{
+					kind: 'block',
+					type: 'end_block'
 				}
 			]
 		}
