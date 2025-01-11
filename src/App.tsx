@@ -1,7 +1,7 @@
 // App.tsx
 import React, { useEffect } from 'react';
-import * as Blockly from 'blockly';
-import { javascriptGenerator } from 'blockly/javascript';
+// import * as Blockly from 'blockly';
+// import { javascriptGenerator } from 'blockly/javascript';
 import { addCustomBlocks } from './customBlocks';
 import { initializeWorkspace } from './customBlocks';
 
