@@ -1,5 +1,5 @@
 import * as Blockly from 'blockly';
-// import { javascriptGenerator } from 'blockly/javascript';
+import { pythonGenerator, Order } from 'blockly/python';
 
 let workspaceInstance: Blockly.WorkspaceSvg | null = null;
 
@@ -86,39 +86,53 @@ export const addCustomBlocks = () => {
 		}
 	};
 
-	// // 2. JavaScriptジェネレーターの定義
-	// javascriptGenerator.forBlock['custom_block'] = function (block) {
-	// 	const code = 'console.log("Custom Block Executed");\n';
-	// 	return code;
-	// };
+	// Pythonジェネレーターの定義を追加
+	definePythonGenerators();
+};
 
-	// javascriptGenerator.forBlock['custom_block2'] = function (block) {
-	// 	const code = 'console.log("Custom Block2 Executed");\n';
-	// 	return code;
-	// };
+// 2. Pythonジェネレーターの定義
+const definePythonGenerators = () => {
+	pythonGenerator.forBlock['custom_block'] = function (block: Blockly.Block) {
+		const code = `print("Custom Block Executed")\n`;
+		return code;
+	};
 
-	// javascriptGenerator.forBlock['start_block'] = function (block) {
-	// 	const code = 'console.log("Start Block Executed");\n';
-	// 	return code;
-	// };
+	pythonGenerator.forBlock['custom_block2'] = function (block: Blockly.Block) {
+		const code = `print("Custom Block2 Executed")\n`;
+		return code;
+	};
 
-	// javascriptGenerator.forBlock['end_block'] = function (block) {
-	// 	const code = 'console.log("End Block2 Executed");\n';
-	// 	return code;
-	// };
+	pythonGenerator.forBlock['start_block'] = function (block: Blockly.Block) {
+		const code = `# Start Block\n`;
+		return code;
+	};
 
-	// javascriptGenerator.forBlock['if_block'] = function (block) {
-	// 	const condition = javascriptGenerator.valueToCode(block, 'CONDITION', 0) || 'false';
-	// 	const statements = javascriptGenerator.statementToCode(block, 'DO');
-	// 	const elseStatements = javascriptGenerator.statementToCode(block, 'ELSE');
-	// 	const code = `if (${condition}) {\n${statements}} else {\n${elseStatements}}\n`;
-	// 	return code;
-	// };
+	pythonGenerator.forBlock['end_block'] = function (block: Blockly.Block) {
+		const code = `# End Block\n`;
+		return code;
+	};
 
-	// javascriptGenerator.forBlock['boolean_block'] = function (block) {
-	// 	const bool = block.getFieldValue('BOOL') === 'TRUE' ? 'true' : 'false';
-	// 	return [bool, javascriptGenerator.ORDER_ATOMIC];
-	// };
+	pythonGenerator.forBlock['if_block'] = function (block: Blockly.Block) {
+		const condition = pythonGenerator.valueToCode(block, 'CONDITION', Order.NONE) || 'False';
+		const doCode = pythonGenerator.statementToCode(block, 'DO') || '# do something\n';
+		const elseCode = pythonGenerator.statementToCode(block, 'ELSE') || '# else do something\n';
+		const code = `if ${condition}:\n${indentCode(doCode)}else:\n${indentCode(elseCode)}`;
+		return code;
+	};
+
+	pythonGenerator.forBlock['boolean_block'] = function (block: Blockly.Block) {
+		const bool = block.getFieldValue('BOOL') === 'TRUE' ? 'True' : 'False';
+		return [bool, Order.ATOMIC];
+	};
+};
+
+// インデントを追加するヘルパー関数
+const indentCode = (code: string, indent: number = 4): string => {
+	const indentation = ' '.repeat(indent);
+	return code
+		.split('\n')
+		.map(line => (line.trim() ? indentation + line : line))
+		.join('\n');
 };
 
 // Workspaceの設定例
@@ -164,6 +178,15 @@ export const getXML = (): string | null => {
 		const xmlDom = Blockly.Xml.workspaceToDom(workspaceInstance);
 		const xmlText = Blockly.Xml.domToPrettyText(xmlDom); // フォーマットされた XML
 		return xmlText;
+	}
+	return null;
+};
+
+// Pythonコードを生成する関数
+export const generatePythonCode = (): string | null => {
+	if (workspaceInstance) {
+		const pythonCode = pythonGenerator.workspaceToCode(workspaceInstance);
+		return pythonCode;
 	}
 	return null;
 };

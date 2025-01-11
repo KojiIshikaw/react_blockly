@@ -1,6 +1,6 @@
 // App.tsx
 import React, { useEffect } from 'react';
-import { addCustomBlocks, initializeWorkspace, getXML } from './customBlocks';
+import { addCustomBlocks, initializeWorkspace, getXML, generatePythonCode } from './customBlocks';
 
 const App: React.FC = () => {
 	useEffect(() => {
@@ -26,6 +26,15 @@ const App: React.FC = () => {
 			console.warn('Workspace is not initialized.');
 		}
 	};
+	const handleGeneratePythonCode = () => {
+		const pythonCode = generatePythonCode();
+		if (pythonCode) {
+			console.log('Blockly Workspace pythonCode:', pythonCode);
+			alert(pythonCode); // 簡単な表示例。必要に応じて他の方法で表示や保存を実装
+		} else {
+			console.warn('Workspace is not initialized.');
+		}
+	};
 
 	return (
 		<div>
@@ -42,6 +51,9 @@ const App: React.FC = () => {
 
 			<button onClick={handleGetXML} style={{ marginTop: '10px' }}>
 				Get XML
+			</button>
+			<button onClick={handleGeneratePythonCode} style={{ marginTop: '10px' }}>
+				Generate Python Code
 			</button>
 		</div>
 	);
